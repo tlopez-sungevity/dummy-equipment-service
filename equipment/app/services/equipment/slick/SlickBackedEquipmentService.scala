@@ -15,6 +15,16 @@ import services.equipment._
 class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfigProvider: DatabaseConfigProvider) extends EquipmentService {
 	val dbConfig = dbConfigProvider.get[JdbcProfile]
 
+
+	class EquipmentTypeTable(tag: Tag) extends Table[(Int, String)](tag, "equipment_type") {
+		def id = column[Int]("id", O.PrimaryKey) // This is the primary key column
+		def name = column[String]("name")
+
+		def * = (id, name)
+	}
+	val equipmentType = TableQuery[EquipmentTypeTable]
+
+
 	class EquipmentTable(tag: Tag) extends Table[(Int, Int, String, Option[String], DateTime, Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean], Option[Double], Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])](tag, "equipment") {
 		def id = column[Int]("id", O.PrimaryKey) // This is the primary key column
 		def equipmentTypeId = column[Int]("equipment_type_id")
@@ -38,25 +48,46 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
         def inverterIsThreePhase = column[Option[Boolean]]("inverter_is_three_phase")
 
 		def * = (id, equipmentTypeId, model, description, modifiedDate, panelKwStc, panelKwPtc, panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
+
+  		def equipmentTypeFK = foreignKey("equipment_type_id", equipmentTypeId, equipmentType)(_.id)
 	}
 	val equipment = TableQuery[EquipmentTable]
 
 
 	def getEquipment(equipmentId: Int): Future[Option[Equipment]] = {
-  		val foundEquipment = dbConfig.db.run(equipment.filter(_.id === equipmentId).result)
-  		
-  		//TODO join on equipment type and manufacturer
+		val equipmentQuery = for { 
+			e <- equipment if e.id === equipmentId
+			et <- equipmentType if e.equipmentTypeId === et.id
+		} yield (
+			e.id,
+			et.name,
+			e.model,
+			e.description,
+			e.modifiedDate,
+			e.panelKwStc,
+			e.panelKwPtc,
+			e.panelHeightMm,
+			e.panelWidthMm,
+			e.panelIsBipvRated,
+			e.powerTempCoefficient,
+			e.normalOperatingCellTemperature,
+			e.rating,
+			e.inverterEfficiency,
+			e.inverterOutputVoltage,
+			e.inverterIsThreePhase)
 
+  		val foundEquipment = dbConfig.db.run(equipmentQuery.result)
+  		
   		foundEquipment map { results => results.headOption map { 
-  			case (id, 2, model, description, modifiedDate,
+  			case (id, "module", model, description, modifiedDate,
   				Some(panelKwStc), Some(panelKwPtc), Some(panelHeightMm), Some(panelWidthMm), panelIsBipvRated, Some(powerTempCoefficient), Some(normalOperatingCellTemperature),
   				None, None, None, isThreePhase) => 
   					Module(id, model, description, modifiedDate, panelKwStc, panelKwPtc, panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature)
-  			case (id, 1, model, description, modifiedDate, 
+  			case (id, "inverter" , model, description, modifiedDate, 
   				None, None, None, None, None, None, None,
   				Some(rating), Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) => 
   					Inverter(id, model, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
-  			case _ => throw new Exception("Unable to map result") //TODO better error handling
+  			case s => throw new Exception(s"Unable to map result: $s") //TODO better error handling
   		} }
 	}
 
