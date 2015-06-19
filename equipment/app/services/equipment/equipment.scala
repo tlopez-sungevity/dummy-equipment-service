@@ -28,4 +28,5 @@ case class Module (
 	heightMm: Double, 
 	widthMm: Double, 
 	isBipvRated: Option[Boolean], 
-	powerTemperatureCoefficient: Double) extends Equipment
+	powerTemperatureCoefficient: Double,
+	normalOperatingCellTemperature: Double) extends Equipment
