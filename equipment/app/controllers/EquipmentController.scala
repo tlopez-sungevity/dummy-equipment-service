@@ -3,6 +3,8 @@ package controllers
 import play.api._
 import play.api.mvc._
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import org.joda.time.DateTime
 import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -13,8 +15,32 @@ import com.sungevity.commons.formats.siren.Implicits._
 
 class EquipmentController @Inject() (equipmentService: EquipmentService) extends Controller {
 
-	implicit val inverterWrites = Json.writes[Inverter]
-	implicit val moduleWrites = Json.writes[Module]
+	private val iso8061Format = "yyyy-MM-dd'T'HH:mm:ss"
+
+	implicit val inverterWrites: Writes[Inverter] = (
+  		(JsPath \ "id").write[Int] and
+  		(JsPath \ "model").write[String] and
+  		(JsPath \ "description").write[Option[String]] and
+  		(JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
+  		(JsPath \ "rating").write[Double] and 
+  		(JsPath \ "efficiency").write[Double] and 
+  		(JsPath \ "outputVoltage").write[Option[Double]] and
+  		(JsPath \ "isThreePhase").write[Option[Boolean]] 
+	)(unlift(Inverter.unapply))
+
+	implicit val moduleWrites: Writes[Module] = (
+  		(JsPath \ "id").write[Int] and
+  		(JsPath \ "model").write[String] and
+  		(JsPath \ "description").write[Option[String]] and
+  		(JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
+  		(JsPath \ "kwStc").write[Double] and 
+  		(JsPath \ "kwPtc").write[Double] and 
+  		(JsPath \ "heightMm").write[Double] and
+  		(JsPath \ "widthMm").write[Double] and
+  		(JsPath \ "isBipvRated").write[Option[Boolean]] and 
+  		(JsPath \ "powerTemperatureCoefficient").write[Double] and
+  		(JsPath \ "normalOperatingCellTemperature").write[Double] 
+	)(unlift(Module.unapply))
 
 	private def toSiren(inverter: Inverter): JsValue = {
 		Json.toJson(SirenEntity(
@@ -30,15 +56,16 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
 			title=Some(s"${module.model}")))
 	}
 
+	private def toNotFoundError(id: Int): JsValue = {
+		Json.obj("message" -> s"Unable to find any equipment for ID $id.")
+	}
 
 	def getEquipment(id: Int) = Action.async {
   		equipmentService.getEquipment(id) map { 
   			case Some(inverter: Inverter) => Ok(toSiren(inverter))
   			case Some(module: Module) => Ok(toSiren(module))
-  			case _ =>  NotFound("Nothing found")
+  			case _ =>  NotFound(toNotFoundError(id))
   		}
   	}
-
-
 
 }

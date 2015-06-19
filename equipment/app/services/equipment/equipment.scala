@@ -1,9 +1,12 @@
 package services.equipment 
 
+import org.joda.time.DateTime
+
 sealed trait Equipment {
 	def id: Int
 	def model: String
 	def description: Option[String]
+	def modifiedDate: DateTime
 }
 
 //TODO what is the unit of measurement for the rating?
@@ -11,7 +14,8 @@ sealed trait Equipment {
 case class Inverter (
 	id: Int, 
 	model: String, 
-	description: Option[String], 
+	description: Option[String],
+	modifiedDate: DateTime, 
 	rating: Double, 
 	efficiency: Double, 
 	outputVoltage: Option[Double], 
@@ -23,6 +27,7 @@ case class Module (
 	id: Int, 
 	model: String, 
 	description: Option[String], 
+	modifiedDate: DateTime,
 	kwStc: Double, 
 	kwPtc: Double, 
 	heightMm: Double, 
