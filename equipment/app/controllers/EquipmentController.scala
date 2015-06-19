@@ -19,7 +19,8 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
 
 	implicit val inverterWrites: Writes[Inverter] = (
   		(JsPath \ "id").write[Int] and
-  		(JsPath \ "model").write[String] and
+  		(JsPath \ "modelName").write[String] and
+  		(JsPath \ "manufacturerName").write[String] and
   		(JsPath \ "description").write[Option[String]] and
   		(JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
   		(JsPath \ "rating").write[Double] and 
@@ -30,7 +31,8 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
 
 	implicit val moduleWrites: Writes[Module] = (
   		(JsPath \ "id").write[Int] and
-  		(JsPath \ "model").write[String] and
+  		(JsPath \ "modelName").write[String] and
+  		(JsPath \ "manufacturerName").write[String] and
   		(JsPath \ "description").write[Option[String]] and
   		(JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
   		(JsPath \ "kwStc").write[Double] and 
@@ -46,14 +48,14 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
 		Json.toJson(SirenEntity(
 			theClass=Set("equipment","equipment-inverter"),
 			properties=Some(Json.toJson(inverter)),
-			title=Some(s"${inverter.model}")))
+			title=Some(s"${inverter.manufacturerName} ${inverter.modelName}")))
 	}
 
 	private def toSiren(module: Module): JsValue = {
 		Json.toJson(SirenEntity(
 			theClass=Set("equipment", "equipment-module"),
 			properties=Some(Json.toJson(module)),
-			title=Some(s"${module.model}")))
+			title=Some(s"${module.manufacturerName} ${module.modelName}")))
 	}
 
 	private def toNotFoundError(id: Int): JsValue = {

@@ -4,7 +4,8 @@ import org.joda.time.DateTime
 
 sealed trait Equipment {
 	def id: Int
-	def model: String
+	def modelName: String
+	def manufacturerName: String
 	def description: Option[String]
 	def modifiedDate: DateTime
 }
@@ -13,7 +14,8 @@ sealed trait Equipment {
 
 case class Inverter (
 	id: Int, 
-	model: String, 
+	modelName: String, 
+	manufacturerName: String,
 	description: Option[String],
 	modifiedDate: DateTime, 
 	rating: Double, 
@@ -25,7 +27,8 @@ case class Inverter (
 
 case class Module (
 	id: Int, 
-	model: String, 
+	modelName: String,
+	manufacturerName: String, 
 	description: Option[String], 
 	modifiedDate: DateTime,
 	kwStc: Double, 
