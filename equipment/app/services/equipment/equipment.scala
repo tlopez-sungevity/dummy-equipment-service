@@ -10,4 +10,4 @@ sealed trait Equipment {
 
 case class Inverter (id: Int, model: String, description: Option[String], rating: Double, efficiency: Double, outputVoltage: Option[Double], isThreePhase: Option[Boolean]) extends Equipment
 
-case class Module (id: Int, model: String, description: Option[String], kwStc: Double, kwPtc: Double, heightMm: Double, widthMm: Double) extends Equipment
+case class Module (id: Int, model: String, description: Option[String], kwStc: Double, kwPtc: Double, heightMm: Double, widthMm: Double, isBipvRated: Option[Boolean]) extends Equipment
