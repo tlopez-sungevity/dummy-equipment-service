@@ -1,4 +1,4 @@
-
+A Proof of Concept for a Dockerized microservice for Equipment. Missing lots of things that would make this production ready but should demonstrate the concept nicely.
 
 Building
 ========
@@ -18,3 +18,11 @@ EQUIPMENT_DB_URL=&lt;jdbc-style-URL-to-DB&gt;
 EQUIPMENT_DB_USER=&lt;user&gt;
 
 EQUIPMENT_DB_PASSWORD=&lt;password&gt;
+
+TODO
+====
+* This repo should also contain the equipment database as the service should be the single point of access to equipment data.
+* tests
+* test coverage
+* style checking
+* pull hecate commons from shared artifactory repository
