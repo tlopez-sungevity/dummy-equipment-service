@@ -1,3 +1,13 @@
+
+
+Building
+========
+
+You will need to have docker installed and running for your environment.
+
+Run "make" from the repo root directory. This will run "activator dist" and build distributable play app into a docker container. Make will be replaced with something cross platform shortly.
+
+
 Environment variables
 =====================
 
