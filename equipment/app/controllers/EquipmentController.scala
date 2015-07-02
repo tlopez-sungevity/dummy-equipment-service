@@ -2,6 +2,7 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import play.api.Logger
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import org.joda.time.DateTime
@@ -67,6 +68,12 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
         case Some(inverter: Inverter) => Ok(toSiren(inverter))
         case Some(module: Module) => Ok(toSiren(module))
         case _ =>  NotFound(toNotFoundError(id))
+      } recover {
+        case e:IllegalStateException => 
+          val msg = s"Unable to map result for Equipment ID $id to known type."
+          Logger.error(msg,e)
+          //TODO error response
+          InternalServerError(Json.obj("message" -> msg))
       }
     }
 

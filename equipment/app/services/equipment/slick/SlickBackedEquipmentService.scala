@@ -9,6 +9,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.db._
 import play.api.db.slick._
+import play.api.Logger
 
 import services.equipment._
 
@@ -52,7 +53,7 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
     def powerTempCoefficient = column[Option[Double]]("power_temp_coefficient")
     def normalOperatingCellTemperature = column[Option[Double]]("power_temp_coefficient")
 
-        /* inverter columns */
+    /* inverter columns */
     def rating = column[Option[Double]]("rating")
     def inverterEfficiency = column[Option[Double]]("inverter_efficiency")
     def inverterOutputVoltage = column[Option[Double]]("inverter_output_voltage")
@@ -69,6 +70,8 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
 
 
   def getEquipment(equipmentId: Int): Future[Option[Equipment]] = {
+    Logger.info(s"Attempting to obtain equipment for $equipmentId")
+
     val equipmentQuery = for {
       e <- equipment if e.id === equipmentId
       et <- equipmentType if e.equipmentTypeId === et.id
@@ -111,7 +114,7 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
           None, None, None, None, None, None, None,
           Some(rating), Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
             Inverter(id, modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
-        case s => throw new Exception(s"Unable to map result: $s") //TODO better error handling
+        case s => throw new IllegalStateException(s"Unable to map result: $s")
       } }
   }
 
