@@ -7,7 +7,7 @@ import services.equipment.EquipmentService
 import services.equipment.slick.SlickBackedEquipmentService
 
 class EquipmentModule extends AbstractModule {
-  def configure() = {
+  def configure(): Unit = {
     bind(classOf[EquipmentService])
       .to(classOf[SlickBackedEquipmentService])
   }
