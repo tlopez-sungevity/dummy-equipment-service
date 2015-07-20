@@ -24,7 +24,7 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
       (JsPath \ "manufacturerName").write[String] and
       (JsPath \ "description").write[Option[String]] and
       (JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
-      (JsPath \ "rating").write[Double] and
+      (JsPath \ "rating").write[Option[Double]] and
       (JsPath \ "efficiency").write[Double] and
       (JsPath \ "outputVoltage").write[Option[Double]] and
       (JsPath \ "isThreePhase").write[Option[Boolean]]

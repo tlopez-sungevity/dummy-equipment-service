@@ -111,8 +111,8 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
         case (
           id,
           "inverter" , modelName, manufacturerName, description, modifiedDate,
-          None, None, None, None, None, None, None,
-          Some(rating), Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
+          None, None, None, None, _, _, _, /* _ fields are being stuffed with marker values of false, 0,0 instead of null */
+          rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
             Inverter(id, modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
         case s => throw new IllegalStateException(s"Unable to map result: $s")
       } }

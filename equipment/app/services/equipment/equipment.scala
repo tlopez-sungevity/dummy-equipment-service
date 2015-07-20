@@ -18,7 +18,7 @@ case class Inverter (
   manufacturerName: String,
   description: Option[String],
   modifiedDate: DateTime,
-  rating: Double,
+  rating: Option[Double],
   efficiency: Double,
   outputVoltage: Option[Double],
   isThreePhase: Option[Boolean]) extends Equipment
