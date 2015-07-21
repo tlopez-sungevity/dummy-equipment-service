@@ -95,10 +95,16 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
       e.inverterOutputVoltage,
       e.inverterIsThreePhase)
 
-      val foundEquipment = dbConfig.db.run(equipmentQuery.result)
+    val foundEquipment = dbConfig.db.run(equipmentQuery.result)
 
-      foundEquipment map { results => results.headOption map {
-        case (
+    foundEquipment map { results => results.headOption map toEquipment } 
+  }
+
+  def toEquipment(result: (Int, String, String, String, Option[String], DateTime, 
+    Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean], Option[Double], 
+    Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])): Equipment = result match {
+    
+    case (
           id,
           "module",
           modelName, manufacturerName, description, modifiedDate,
@@ -108,14 +114,15 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
             Module(
               id, modelName, manufacturerName, description, modifiedDate, panelKwStc, panelKwPtc,
               panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature)
-        case (
+    
+    case (
           id,
           "inverter" , modelName, manufacturerName, description, modifiedDate,
           None, None, None, None, _, _, _, /* _ fields are being stuffed with marker values of false, 0,0 instead of null */
           rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
             Inverter(id, modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
-        case s => throw new IllegalStateException(s"Unable to map result: $s")
-      } }
+    
+    case s => throw new IllegalStateException(s"Unable to map result: $s")
   }
 
 }

@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   ws,
   "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
   "com.typesafe.play" %% "play-slick" % "1.0.0",
   "mysql" % "mysql-connector-java" % "5.1.35",
   "joda-time" % "joda-time" % "2.7",
