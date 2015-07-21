@@ -26,21 +26,21 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
       (JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
       (JsPath \ "rating").write[Option[Double]] and
       (JsPath \ "efficiency").write[Double] and
-      (JsPath \ "outputVoltage").write[Option[Double]] and
-      (JsPath \ "isThreePhase").write[Option[Boolean]]
+      (JsPath \ "outputVoltage").writeNullable[Double] and
+      (JsPath \ "isThreePhase").writeNullable[Boolean]
   )(unlift(Inverter.unapply))
 
   implicit val moduleWrites: Writes[Module] = (
       (JsPath \ "id").write[Int] and
       (JsPath \ "modelName").write[String] and
       (JsPath \ "manufacturerName").write[String] and
-      (JsPath \ "description").write[Option[String]] and
+      (JsPath \ "description").writeNullable[String] and
       (JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
       (JsPath \ "kwStc").write[Double] and
       (JsPath \ "kwPtc").write[Double] and
       (JsPath \ "heightMm").write[Double] and
       (JsPath \ "widthMm").write[Double] and
-      (JsPath \ "isBipvRated").write[Option[Boolean]] and
+      (JsPath \ "isBipvRated").writeNullable[Boolean] and
       (JsPath \ "powerTemperatureCoefficient").write[Double] and
       (JsPath \ "normalOperatingCellTemperature").write[Double]
   )(unlift(Module.unapply))

@@ -104,7 +104,7 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
           modelName, manufacturerName, description, modifiedDate,
           Some(panelKwStc), Some(panelKwPtc), Some(panelHeightMm), Some(panelWidthMm),
           panelIsBipvRated, Some(powerTempCoefficient), Some(normalOperatingCellTemperature),
-          None, None, None, isThreePhase) =>
+          None, None, None, _) =>
             Module(
               id, modelName, manufacturerName, description, modifiedDate, panelKwStc, panelKwPtc,
               panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature)

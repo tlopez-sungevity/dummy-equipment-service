@@ -33,7 +33,7 @@ class EquipmentServiceISpec extends PlaySpec with OneServerPerSuite {
       response.status mustBe NOT_FOUND
     }
 
-    "return 200 when the equipment (module) with id is found" in {
+    "return 200 when the equipment (module) with id 32 is found" in {
       val prefix = s"http://localhost:$port"
       val response = await(WS.url(s"$prefix/equipment/32").get)
      
@@ -58,9 +58,31 @@ class EquipmentServiceISpec extends PlaySpec with OneServerPerSuite {
       response.header("Content-Type") must contain ("application/json; charset=utf-8")
       response.json mustBe expectedJson
     }
+
+    "return 200 when the equipment (inverter) with id 406 is found" in {
+      val prefix = s"http://localhost:$port"
+      val response = await(WS.url(s"$prefix/equipment/406").get)
+     
+      val expectedJson = Json.obj(
+        "class" -> Json.arr("equipment","equipment-inverter"),
+        "properties" -> Json.obj(
+          "id" -> 406,
+          "modelName" -> "1501xi",
+          "manufacturerName" -> "Kaco",
+          "description" -> "1.5 kW, 240 Vac, 125-400Vdc Utility Interactive Inverter",
+          "modifiedDate" -> "2012-08-14T20:22:07",
+          "rating" -> 2,
+          "efficiency" -> 0.94),
+        "title" -> "Kaco 1501xi")
+
+      response.status mustBe OK
+      response.header("Content-Type") must contain ("application/json; charset=utf-8")
+      response.json mustBe expectedJson
+    }
   }
 
   //TODO database fixtures
   //TODO test valid response for panel
   //TODO test malforned data to type mapping
+  //TODO missing description
 }
