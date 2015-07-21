@@ -118,7 +118,8 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
     case (
           id,
           "inverter" , modelName, manufacturerName, description, modifiedDate,
-          None, None, None, None, _, _, _, /* _ fields are being stuffed with marker values of false, 0,0 instead of null */
+          None, None, None, None, 
+          _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
           rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
             Inverter(id, modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
     
