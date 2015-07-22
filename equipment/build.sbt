@@ -31,6 +31,6 @@ scalacOptions += "-Xlint"
 // exclude play generated code from scoverage
 ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;router\\..*"
 
-// fail if coverage is less than 90%
-ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 90
+// fail if coverage is less than 100%
+ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 100
 ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := true

@@ -16,7 +16,7 @@ import play.api.libs.json.Json
 class EquipmentControllerSpec extends PlaySpec with Results with MockFactory {
   "Equipment Controller" should {
 
-    "return an error when found equipment cannot be mapped to a known equipment type" in {
+    "return 500 status code and an error response body when found equipment cannot be mapped to a known equipment type" in {
       val equipmentId = 42
 
       val equipmentServiceMock = stub[EquipmentService]

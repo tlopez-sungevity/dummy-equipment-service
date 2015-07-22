@@ -114,7 +114,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
     val service = new SlickBackedEquipmentService(dbConfigProviderMock)      
   }
 
- "A Slick-based implementation of the Equipment Service " should "convert result for module db query to a Module instance" in new ModuleFixture with InitializedEquipmentService {
+  "A Slick-based implementation of the Equipment Service " should "convert result for module db query to a Module instance" in new ModuleFixture with InitializedEquipmentService {
     service.toEquipment(moduleResultWithDescription) shouldBe moduleWithDescription
   }
 

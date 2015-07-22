@@ -13,7 +13,18 @@ import play.api.Logger
 
 import services.equipment._
 
+/**
+  * Slick implementation of the Equipment Service that reads equipment from a MySQL db.
+  *
+  * @constructor create a new controller with an injected db config provider
+  * @param dbConfigProvider the config for the equipment database 
+  */
 class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfigProvider: DatabaseConfigProvider) extends EquipmentService {
+  
+  protected[slick] type EquipmentResult = (Int, String, String, String, Option[String], DateTime, 
+    Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean], Option[Double], 
+    Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])
+
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
 
@@ -97,9 +108,7 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
     foundEquipment map { results => results.headOption map toEquipment } 
   }
 
-  def toEquipment(result: (Int, String, String, String, Option[String], DateTime, 
-    Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean], Option[Double], 
-    Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])): Equipment = result match {
+  protected[slick] def toEquipment(result: EquipmentResult): Equipment = result match {
     
     case (
           id,
