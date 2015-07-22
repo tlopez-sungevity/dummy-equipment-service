@@ -62,9 +62,6 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
     def * = (id, equipmentTypeId, manufacturerId, model, description, modifiedDate, panelKwStc, panelKwPtc,
       panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, rating,
       inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
-
-    def equipmentTypeFk = foreignKey("equipment_type_id", equipmentTypeId, equipmentType)(_.id)
-    def manufacturerFk = foreignKey("manufacturer_id", manufacturerId, manufacturer)(_.id)
   }
   val equipment = TableQuery[EquipmentTable]
 
