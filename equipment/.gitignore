@@ -6,7 +6,6 @@ target
 /.project
 /.settings
 /RUNNING_PID
-/lib
 
 #OSX nastiness
 .DS_Store

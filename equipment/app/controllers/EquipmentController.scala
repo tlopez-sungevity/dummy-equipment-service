@@ -47,14 +47,14 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
 
   private def toSiren(inverter: Inverter): JsValue = {
     Json.toJson(SirenEntity(
-      theClass=Set("equipment","equipment-inverter"),
+      `class`=List("equipment","equipment-inverter"),
       properties=Some(Json.toJson(inverter)),
       title=Some(s"${inverter.manufacturerName} ${inverter.modelName}")))
   }
 
   private def toSiren(module: Module): JsValue = {
     Json.toJson(SirenEntity(
-      theClass=Set("equipment", "equipment-module"),
+      `class`=List("equipment", "equipment-module"),
       properties=Some(Json.toJson(module)),
       title=Some(s"${module.manufacturerName} ${module.modelName}")))
   }
