@@ -45,18 +45,20 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
       (JsPath \ "normalOperatingCellTemperature").write[Double]
   )(unlift(Module.unapply))
 
-  private def toSiren(inverter: Inverter): JsValue = {
-    Json.toJson(SirenEntity(
-      `class`=List("equipment","equipment-inverter"),
-      properties=Some(Json.toJson(inverter)),
-      title=Some(s"${inverter.manufacturerName} ${inverter.modelName}")))
+  implicit class InverterSerializer(inverter: Inverter) extends SirenEntitySerializer {
+    def toSirenEntity: SirenEntity =
+      SirenEntity(
+        `class`=List("equipment","equipment-inverter"),
+        properties=Some(Json.toJson(inverter)),
+        title=Some(s"${inverter.manufacturerName} ${inverter.modelName}"))  
   }
 
-  private def toSiren(module: Module): JsValue = {
-    Json.toJson(SirenEntity(
-      `class`=List("equipment", "equipment-module"),
-      properties=Some(Json.toJson(module)),
-      title=Some(s"${module.manufacturerName} ${module.modelName}")))
+  implicit class ModuleSerializer(module: Module) extends SirenEntitySerializer {
+    def toSirenEntity: SirenEntity =
+      SirenEntity(
+        `class`=List("equipment", "equipment-module"),
+        properties=Some(Json.toJson(module)),
+        title=Some(s"${module.manufacturerName} ${module.modelName}"))
   }
 
   private def toNotFoundError(id: Int): JsValue = {
@@ -65,8 +67,8 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
 
   def getEquipment(id: Int): Action[AnyContent] = Action.async {
       equipmentService.getEquipment(id) map {
-        case Some(inverter: Inverter) => Ok(toSiren(inverter))
-        case Some(module: Module) => Ok(toSiren(module))
+        case Some(inverter: Inverter) => Ok(Json.toJson(inverter toSirenEntity))
+        case Some(module: Module) => Ok(Json.toJson(module toSirenEntity))
         case _ =>  NotFound(toNotFoundError(id))
       } recover {
         case e:IllegalStateException => 
