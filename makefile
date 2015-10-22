@@ -1,7 +1,10 @@
-all : play-app docker
+all : dockerize
 	
 play-app : 
-	cd equipment; activator dist
+	cd equipment-service; activator dist
 
-docker :
-	docker build -t ahullsungevity/equipment .
+dockerize : play-app
+	docker build -t sungevity-docker-dockerv2-local.artifactoryonline.com/equipment-service .
+
+publish : dockerize
+	docker push sungevity-docker-dockerv2-local.artifactoryonline.com/equipment-service
