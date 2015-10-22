@@ -1,4 +1,4 @@
-name := """equipment"""
+name := """equipment-service"""
 
 version := "1.0-SNAPSHOT"
 
@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0",
-  "com.sungevity" %% "play-siren" % "0.2.0"
+  "com.sungevity" %% "play-siren" % "0.3.0"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"

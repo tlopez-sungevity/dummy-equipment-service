@@ -9,7 +9,7 @@ import org.joda.time.DateTime
 import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import services.equipment.{EquipmentService, Equipment, Inverter, Module}
+import service.equipment.{EquipmentService, Equipment, Inverter, Module}
 
 import com.sungevity.commons.formats.siren._
 import com.sungevity.commons.formats.siren.Implicits._
@@ -48,7 +48,7 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
   implicit class InverterSerializer(inverter: Inverter) extends SirenEntitySerializer {
     def toSirenEntity: SirenEntity =
       SirenEntity(
-        `class`=List("equipment","equipment-inverter"),
+        `class`=Set("equipment","equipment-inverter"),
         properties=Some(Json.toJson(inverter)),
         title=Some(s"${inverter.manufacturerName} ${inverter.modelName}"))  
   }
@@ -56,7 +56,7 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
   implicit class ModuleSerializer(module: Module) extends SirenEntitySerializer {
     def toSirenEntity: SirenEntity =
       SirenEntity(
-        `class`=List("equipment", "equipment-module"),
+        `class`=Set("equipment", "equipment-module"),
         properties=Some(Json.toJson(module)),
         title=Some(s"${module.manufacturerName} ${module.modelName}"))
   }

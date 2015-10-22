@@ -1,4 +1,4 @@
-package services.equipment
+package service.equipment
 
 import scala.concurrent.Future
 

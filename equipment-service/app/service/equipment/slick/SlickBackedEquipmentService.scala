@@ -1,4 +1,4 @@
-package services.equipment.slick
+package service.equipment.slick
 
 import org.joda.time.DateTime
 import javax.inject._
@@ -11,7 +11,7 @@ import play.api.db._
 import play.api.db.slick._
 import play.api.Logger
 
-import services.equipment._
+import service.equipment._
 
 /**
   * Slick implementation of the Equipment Service that reads equipment from a MySQL db.
