@@ -1,4 +1,7 @@
-A Proof of Concept for a Dockerized microservice for Equipment. Missing lots of things that would make this production ready but should demonstrate the concept nicely.
+-----------------------------------------------------------------
+| equipment         | Scala equipment service interface library |
+| equipment-service | Equipment microservice                    |
+-----------------------------------------------------------------
 
 Building
 ========
