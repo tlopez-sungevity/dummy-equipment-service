@@ -18,7 +18,9 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0",
-  "com.sungevity" %% "play-siren" % "0.3.0"
+  "net.codingwell" %% "scala-guice" % "4.0.0",
+  "com.sungevity" %% "play-siren" % "0.3.0",
+  "com.sungevity" %% "equipment" % "0.0.1"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
@@ -30,7 +32,7 @@ credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
 
-scalacOptions += "-Xlint"
+scalacOptions ++= Seq("-Xlint", "-deprecation", "-feature")
 
 // exclude play generated code from scoverage
 ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;router\\..*"

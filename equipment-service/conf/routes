@@ -3,4 +3,4 @@
 # ~~~~
 
 # Home page
-GET     /equipment/:id              controllers.EquipmentController.getEquipment(id: Int)
+GET     /equipment/:id              @controllers.EquipmentController.getEquipment(id: Int)

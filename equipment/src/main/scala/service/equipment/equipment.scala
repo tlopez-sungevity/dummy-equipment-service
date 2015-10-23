@@ -1,6 +1,7 @@
 package service.equipment
 
 import org.joda.time.DateTime
+import scala.concurrent.Future
 
 sealed trait Equipment {
   def id: Int
@@ -38,3 +39,7 @@ case class Module (
   isBipvRated: Option[Boolean],
   powerTemperatureCoefficient: Double,
   normalOperatingCellTemperature: Double) extends Equipment
+
+trait EquipmentService {
+  def getEquipment(equipmentId: Int): Future[Option[Equipment]]
+}
