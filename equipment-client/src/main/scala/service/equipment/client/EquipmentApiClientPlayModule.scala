@@ -6,7 +6,11 @@ import net.codingwell.scalaguice._
 
 import service.equipment.EquipmentService
 
-class EquipmentApiClientModule extends AbstractModule with ScalaModule {
+/**
+ * Guice Module for Equipment API Client, requires being loaded
+ * into a Play application for access to WSClient.
+ */
+class EquipmentApiClientPlayModule extends AbstractModule with ScalaModule {
   def configure: Unit = {
     bind[Config].toInstance(ConfigFactory.load())
     bind[EquipmentService].to[EquipmentApiClient]

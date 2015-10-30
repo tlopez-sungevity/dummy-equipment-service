@@ -36,16 +36,15 @@ class EquipmentApiClient @Inject() (ws: WSClient, config: Config) extends Equipm
       response =>   
         response.status match {
           case 200 => {
-            val sirenResource = response.json.as[SirenEntity]
-
-            sirenResource.`class`.toList collectFirst {
-              case "equipment-inverter" => sirenResource.properties.map { _.as[Inverter] }
-              case "equipment-module" => sirenResource.properties.map { _.as[Module] }
-            } flatten
-
+            response.json.asOpt[SirenEntity] flatMap { sirenResource =>
+              (sirenResource.`class`.toList collectFirst {
+                case "equipment-inverter" => sirenResource.properties.map { _.as[Inverter] }
+                case "equipment-module" => sirenResource.properties.map { _.as[Module] }
+              }).flatten
+            }
           }
           case 404 => None
-          case status => throw new EquipmentException(s"$status ${response.statusText}")
+          case status => throw new EquipmentException(s"Equipment Service Error HTTP Status: $status ${response.statusText}")
         }
     }
   }

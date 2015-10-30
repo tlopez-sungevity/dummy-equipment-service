@@ -27,5 +27,6 @@ libraryDependencies ++= Seq(
 )
 
 // fail if coverage is less than 100%
-ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 100
-ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := true
+coverageMinimum := 100
+coverageFailOnMinimum := true
+coverageExcludedPackages := "service.equipment.client.EquipmentApiClientPlayModule"
