@@ -8,6 +8,7 @@ lazy val root = (project in file(".")).settings(
 scalacOptions ++= Seq("-Xlint", "-deprecation", "-feature")
 
 resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "Artifactory Realm" at "https://sungevity.artifactoryonline.com/sungevity/libs-release-local"
 
 publishTo := Some("Artifactory Realm" at "https://sungevity.artifactoryonline.com/sungevity/libs-release-local")
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")

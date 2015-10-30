@@ -12,32 +12,35 @@ import service.equipment._
 object Implicits {
   private val iso8061Format = "yyyy-MM-dd'T'HH:mm:ss"
 
+  implicit val equipmentIdentityReads: Reads[EquipmentIdentity] = Reads.of[Int].map( new EquipmentIdentity(_) )
+  implicit val equipmentIdentityWrites: Writes[EquipmentIdentity] = Writes { (equipmentId: EquipmentIdentity) => JsNumber(equipmentId.value) }
+
   implicit val inverterReads: Reads[Inverter] = (
-      (JsPath \ "id").read[Int] and
+      (JsPath \ "id").read[EquipmentIdentity] and
       (JsPath \ "modelName").read[String] and
       (JsPath \ "manufacturerName").read[String] and
-      (JsPath \ "description").read[Option[String]] and
+      (JsPath \ "description").readNullable[String] and
       (JsPath \ "modifiedDate").read[DateTime](Reads.jodaDateReads(iso8061Format)) and
-      (JsPath \ "rating").read[Option[Double]] and
+      (JsPath \ "rating").readNullable[Double] and
       (JsPath \ "efficiency").read[Double] and
       (JsPath \ "outputVoltage").readNullable[Double] and
       (JsPath \ "isThreePhase").readNullable[Boolean]
   )(Inverter.apply _)
 
   implicit val inverterWrites: Writes[Inverter] = (
-      (JsPath \ "id").write[Int] and
+      (JsPath \ "id").write[EquipmentIdentity] and
       (JsPath \ "modelName").write[String] and
       (JsPath \ "manufacturerName").write[String] and
-      (JsPath \ "description").write[Option[String]] and
+      (JsPath \ "description").writeNullable[String] and
       (JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
-      (JsPath \ "rating").write[Option[Double]] and
+      (JsPath \ "rating").writeNullable[Double] and
       (JsPath \ "efficiency").write[Double] and
       (JsPath \ "outputVoltage").writeNullable[Double] and
       (JsPath \ "isThreePhase").writeNullable[Boolean]
   )(unlift(Inverter.unapply))
 
   implicit val moduleReads: Reads[Module] = (
-      (JsPath \ "id").read[Int] and
+      (JsPath \ "id").read[EquipmentIdentity] and
       (JsPath \ "modelName").read[String] and
       (JsPath \ "manufacturerName").read[String] and
       (JsPath \ "description").readNullable[String] and
@@ -52,7 +55,7 @@ object Implicits {
   )(Module.apply _)
 
   implicit val moduleWrites: Writes[Module] = (
-      (JsPath \ "id").write[Int] and
+      (JsPath \ "id").write[EquipmentIdentity] and
       (JsPath \ "modelName").write[String] and
       (JsPath \ "manufacturerName").write[String] and
       (JsPath \ "description").writeNullable[String] and

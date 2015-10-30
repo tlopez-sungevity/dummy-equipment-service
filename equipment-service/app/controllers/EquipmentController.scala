@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import com.sungevity.commons.formats.siren.Implicits._
 import serialize.equipment.Implicits._
-import service.equipment.{EquipmentService, Equipment, Inverter, Module}
+import service.equipment._
 
 class EquipmentController @Inject() (equipmentService: EquipmentService) extends Controller {
   private def toNotFoundError(id: Int): JsValue = {
@@ -19,9 +19,15 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
   }
 
   def getEquipment(id: Int): Action[AnyContent] = Action.async {
-      equipmentService.getEquipment(id) map {
-        case Some(inverter: Inverter) => Ok(Json.toJson(inverter toSirenEntity))
-        case Some(module: Module) => Ok(Json.toJson(module toSirenEntity))
+      equipmentService.getEquipment(new EquipmentIdentity(id)) map {
+        case Some(inverter: Inverter) => 
+          val serializedResponseBody = Json.toJson(inverter toSirenEntity)
+          Logger.info(s"response -> $serializedResponseBody")
+          Ok(serializedResponseBody)
+        case Some(module: Module) => 
+          val serializedResponseBody = Json.toJson(module toSirenEntity)
+          Logger.info(s"response -> $serializedResponseBody")
+          Ok(serializedResponseBody)
         case _ =>  NotFound(toNotFoundError(id))
       } recover {
         case e:IllegalStateException => 
@@ -29,6 +35,10 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
           Logger.error(msg,e)
           //TODO error response
           InternalServerError(Json.obj("message" -> msg))
+        case f => 
+          Logger.error("Weird..", f)
+          InternalServerError("Weird")
+
       }
     }
 

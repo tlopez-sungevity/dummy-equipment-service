@@ -15,6 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
   * Client library for accessing remote equipment service.
   *
   * @param ws web service client instance
+  * @param config configruation service
   */
 class EquipmentApiClient @Inject() (ws: WSClient, config: Config) extends EquipmentService {
 
@@ -24,28 +25,30 @@ class EquipmentApiClient @Inject() (ws: WSClient, config: Config) extends Equipm
    * @param equipmentId identity of equipment to retrieve
    * @return future option of equipment information
    */
-  def getEquipment(equipmentId: Int): Future[Option[Equipment]] = {
+  def getEquipment(equipmentId: EquipmentIdentity): Future[Option[Equipment]] = {
     import scala.language.postfixOps
 
-    ws.url(s"${equipmentUrl}/${equipmentId}").get() map {
+    val requestUrl = s"${equipmentUrl}/${equipmentId.value}"
+
+    println(s"EquipmentApiClient calling $requestUrl")
+
+    ws.url(requestUrl).get() map {
       response =>   
         response.status match {
           case 200 => {
             val sirenResource = response.json.as[SirenEntity]
 
             sirenResource.`class`.toList collectFirst {
-              case "inverter" => sirenResource.properties.map { _.as[Inverter] }
-              case "module" => sirenResource.properties.map { _.as[Module] }
+              case "equipment-inverter" => sirenResource.properties.map { _.as[Inverter] }
+              case "equipment-module" => sirenResource.properties.map { _.as[Module] }
             } flatten
 
           }
           case 404 => None
-          case _ => throw new EquipmentException()
+          case status => throw new EquipmentException(s"$status ${response.statusText}")
         }
     }
   }
 
-  private def equipmentUrl = {
-    "http://localhost:9000/equipment"
-  }
+  private def equipmentUrl = config.getString("service.equipment.client.apiUrl")
 }  
