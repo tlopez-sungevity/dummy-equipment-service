@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.7",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0",
   "net.codingwell" %% "scala-guice" % "4.0.0",
-  "com.sungevity" %% "equipment" % "0.0.1-SNAPSHOT"
+  "com.sungevity" %% "equipment" % "0.1.0"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"

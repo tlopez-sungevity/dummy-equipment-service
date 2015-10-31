@@ -1,7 +1,7 @@
 lazy val root = (project in file(".")).settings(
   name := "equipment-client",
   organization := "com.sungevity",
-  version := "0.0.1-SNAPSHOT",
+  version := "0.1.0",
   scalaVersion := "2.11.7"
 )
 
@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.7",
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "com.sungevity" %% "play-siren" % "0.3.0",
-  "com.sungevity" %% "equipment" % "0.0.1-SNAPSHOT"
+  "com.sungevity" %% "equipment" % "0.1.0"
 )
 
 // fail if coverage is less than 100%

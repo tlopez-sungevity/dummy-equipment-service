@@ -18,6 +18,8 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
     Json.obj("message" -> s"Unable to find any equipment for ID $id.")
   }
 
+  //TODO clean up logging and error handling
+
   def getEquipment(id: Int): Action[AnyContent] = Action.async {
       equipmentService.getEquipment(new EquipmentIdentity(id)) map {
         case Some(inverter: Inverter) => 
@@ -30,7 +32,7 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
           Ok(serializedResponseBody)
         case _ =>  NotFound(toNotFoundError(id))
       } recover {
-        case e:IllegalStateException => 
+        case e: IllegalStateException => 
           val msg = s"Unable to map result for Equipment ID $id to known type."
           Logger.error(msg,e)
           //TODO error response
