@@ -1,4 +1,4 @@
-package serialize.equipment 
+package serialize.equipment
 
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -74,7 +74,7 @@ object Implicits {
       SirenEntity(
         `class`=Set("equipment","equipment-inverter"),
         properties=Some(Json.toJson(inverter)),
-        title=Some(s"${inverter.manufacturerName} ${inverter.modelName}"))  
+        title=Some(s"${inverter.manufacturerName} ${inverter.modelName}"))
   }
 
   implicit class ModuleSerializer(module: Module) extends SirenEntitySerializer {
