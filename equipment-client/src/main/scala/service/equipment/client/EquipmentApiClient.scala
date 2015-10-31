@@ -37,7 +37,7 @@ class EquipmentApiClient @Inject() (ws: WSClient, config: Config) extends Equipm
     logger.info(s"Equipment API Client -> $requestUrl")
 
     ws.url(requestUrl).get() map {
-      response =>   
+      response =>
         logger.info(s"Equipment API Client <- ${response.json}")
 
         response.status match {
@@ -49,10 +49,10 @@ class EquipmentApiClient @Inject() (ws: WSClient, config: Config) extends Equipm
               }).flatten
             }
           }
-          case 404 => 
+          case 404 =>
             logger.warn(s"Equipment ID ${equipmentId.value} could not be found by the Equipment Service.")
             None
-          case status => 
+          case status =>
             val message = s"Equipment Service returned error HTTP Status: $status ${response.statusText}"
             logger.error(s"$message -> ${response.body}")
 
@@ -62,4 +62,4 @@ class EquipmentApiClient @Inject() (ws: WSClient, config: Config) extends Equipm
   }
 
   private def equipmentUrl = config.getString("service.equipment.client.apiUrl")
-}  
+}
