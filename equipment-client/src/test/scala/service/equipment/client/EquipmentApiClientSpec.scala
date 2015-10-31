@@ -158,7 +158,7 @@ class EquipmentApiClientSpec extends FlatSpec with Matchers with MockFactory wit
 
     whenReady (futureEquipment.failed) { ex => 
       ex shouldBe a [EquipmentException]
-      ex.getMessage shouldBe (s"Equipment Service Error HTTP Status: $status $statusText")
+      ex.getMessage shouldBe (s"Equipment Service returned error HTTP Status: $status $statusText")
     }
   } 
 
