@@ -34,8 +34,8 @@ routesGenerator := InjectedRoutesGenerator
 scalacOptions ++= Seq("-Xlint", "-deprecation", "-feature")
 
 // exclude play generated code from scoverage
-ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;router\\..*"
+coverageExcludedPackages := "<empty>;Reverse.*;router\\..*"
 
 // fail if coverage is less than 100%
-ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 100
-ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := true
+coverageMinimum := 100
+coverageFailOnMinimum := true
