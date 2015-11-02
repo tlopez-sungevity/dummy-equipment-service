@@ -2,7 +2,7 @@ package controllers
 
 import scala.concurrent.Future
 
-import services.equipment.EquipmentService
+import service.equipment.{EquipmentService, EquipmentIdentity}
 
 import org.scalatest._
 import org.scalatestplus.play._
@@ -20,7 +20,7 @@ class EquipmentControllerSpec extends PlaySpec with Results with MockFactory {
       val equipmentId = 42
 
       val equipmentServiceMock = stub[EquipmentService]
-      (equipmentServiceMock.getEquipment _).when(equipmentId).returns( 
+      (equipmentServiceMock.getEquipment _).when(new EquipmentIdentity(equipmentId)).returns( 
         Future.failed(new IllegalStateException("Failed to map")) 
       )
 

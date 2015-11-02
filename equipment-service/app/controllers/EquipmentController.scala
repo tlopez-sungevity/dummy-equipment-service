@@ -9,73 +9,38 @@ import org.joda.time.DateTime
 import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import service.equipment.{EquipmentService, Equipment, Inverter, Module}
-
-import com.sungevity.commons.formats.siren._
 import com.sungevity.commons.formats.siren.Implicits._
+import serialize.equipment.Implicits._
+import service.equipment._
 
 class EquipmentController @Inject() (equipmentService: EquipmentService) extends Controller {
-
-  private val iso8061Format = "yyyy-MM-dd'T'HH:mm:ss"
-
-  implicit val inverterWrites: Writes[Inverter] = (
-      (JsPath \ "id").write[Int] and
-      (JsPath \ "modelName").write[String] and
-      (JsPath \ "manufacturerName").write[String] and
-      (JsPath \ "description").write[Option[String]] and
-      (JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
-      (JsPath \ "rating").write[Option[Double]] and
-      (JsPath \ "efficiency").write[Double] and
-      (JsPath \ "outputVoltage").writeNullable[Double] and
-      (JsPath \ "isThreePhase").writeNullable[Boolean]
-  )(unlift(Inverter.unapply))
-
-  implicit val moduleWrites: Writes[Module] = (
-      (JsPath \ "id").write[Int] and
-      (JsPath \ "modelName").write[String] and
-      (JsPath \ "manufacturerName").write[String] and
-      (JsPath \ "description").writeNullable[String] and
-      (JsPath \ "modifiedDate").write[DateTime](Writes.jodaDateWrites(iso8061Format)) and
-      (JsPath \ "kwStc").write[Double] and
-      (JsPath \ "kwPtc").write[Double] and
-      (JsPath \ "heightMm").write[Double] and
-      (JsPath \ "widthMm").write[Double] and
-      (JsPath \ "isBipvRated").writeNullable[Boolean] and
-      (JsPath \ "powerTemperatureCoefficient").write[Double] and
-      (JsPath \ "normalOperatingCellTemperature").write[Double]
-  )(unlift(Module.unapply))
-
-  implicit class InverterSerializer(inverter: Inverter) extends SirenEntitySerializer {
-    def toSirenEntity: SirenEntity =
-      SirenEntity(
-        `class`=Set("equipment","equipment-inverter"),
-        properties=Some(Json.toJson(inverter)),
-        title=Some(s"${inverter.manufacturerName} ${inverter.modelName}"))  
-  }
-
-  implicit class ModuleSerializer(module: Module) extends SirenEntitySerializer {
-    def toSirenEntity: SirenEntity =
-      SirenEntity(
-        `class`=Set("equipment", "equipment-module"),
-        properties=Some(Json.toJson(module)),
-        title=Some(s"${module.manufacturerName} ${module.modelName}"))
-  }
-
   private def toNotFoundError(id: Int): JsValue = {
     Json.obj("message" -> s"Unable to find any equipment for ID $id.")
   }
 
+  //TODO clean up logging and error handling
+
   def getEquipment(id: Int): Action[AnyContent] = Action.async {
-      equipmentService.getEquipment(id) map {
-        case Some(inverter: Inverter) => Ok(Json.toJson(inverter toSirenEntity))
-        case Some(module: Module) => Ok(Json.toJson(module toSirenEntity))
+      equipmentService.getEquipment(new EquipmentIdentity(id)) map {
+        case Some(inverter: Inverter) => 
+          val serializedResponseBody = Json.toJson(inverter toSirenEntity)
+          Logger.info(s"response -> $serializedResponseBody")
+          Ok(serializedResponseBody)
+        case Some(module: Module) => 
+          val serializedResponseBody = Json.toJson(module toSirenEntity)
+          Logger.info(s"response -> $serializedResponseBody")
+          Ok(serializedResponseBody)
         case _ =>  NotFound(toNotFoundError(id))
       } recover {
-        case e:IllegalStateException => 
+        case e: IllegalStateException => 
           val msg = s"Unable to map result for Equipment ID $id to known type."
           Logger.error(msg,e)
           //TODO error response
           InternalServerError(Json.obj("message" -> msg))
+        case f => 
+          Logger.error("Weird..", f)
+          InternalServerError("Weird")
+
       }
     }
 

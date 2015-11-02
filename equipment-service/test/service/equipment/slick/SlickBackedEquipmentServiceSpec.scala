@@ -1,6 +1,6 @@
-package services.equipment.slick
+package service.equipment.slick
 
-import services.equipment.{Inverter, Module}
+import service.equipment._
 
 import org.scalatest._
 import Matchers._
@@ -8,7 +8,7 @@ import org.scalamock.scalatest.MockFactory
 
 import org.joda.time.DateTime
 
-import slick.driver.JdbcProfile
+import _root_.slick.driver.JdbcProfile
 
 import play.api.test._
 import play.api.test.Helpers._
@@ -51,7 +51,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
   	)
 
     val moduleWithDescription = Module(
-      moduleId,
+      new EquipmentIdentity(moduleId),
       moduleName,
       manufacturerName,
       someDescription,
@@ -94,7 +94,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
     )
 
     val inverterWithDescription = Inverter(
-      inverterId,
+      new EquipmentIdentity(inverterId),
       inverterName,
       manufacturerName,
       someDescription,

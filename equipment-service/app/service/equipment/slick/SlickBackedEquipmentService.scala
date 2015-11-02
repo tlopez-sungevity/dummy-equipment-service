@@ -62,7 +62,7 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
     def panelWidthMm = column[Option[Double]]("panel_width_mm")
     def panelIsBipvRated = column[Option[Boolean]]("panel_is_bipv_rated")
     def powerTempCoefficient = column[Option[Double]]("power_temp_coefficient")
-    def normalOperatingCellTemperature = column[Option[Double]]("power_temp_coefficient")
+    def normalOperatingCellTemperature = column[Option[Double]]("normal_operating_cell_temperature")
 
     /* inverter columns */
     def rating = column[Option[Double]]("rating")
@@ -77,11 +77,11 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
   val equipment = TableQuery[EquipmentTable]
 
 
-  def getEquipment(equipmentId: Int): Future[Option[Equipment]] = {
+  def getEquipment(equipmentId: EquipmentIdentity): Future[Option[Equipment]] = {
     Logger.info(s"Attempting to obtain equipment for $equipmentId")
 
     val equipmentQuery = for {
-      e <- equipment if e.id === equipmentId
+      e <- equipment if e.id === equipmentId.value
       et <- equipmentType if e.equipmentTypeId === et.id
       m <- manufacturer if e.manufacturerId === m.id
     } yield (
@@ -118,7 +118,7 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
           panelIsBipvRated, Some(powerTempCoefficient), Some(normalOperatingCellTemperature),
           None, None, None, _) =>
             Module(
-              id, modelName, manufacturerName, description, modifiedDate, panelKwStc, panelKwPtc,
+              new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, panelKwStc, panelKwPtc,
               panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature)
     
     case (
@@ -127,7 +127,7 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
           None, None, None, None, 
           _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
           rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
-            Inverter(id, modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
+            Inverter(new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
     
     case s => throw new IllegalStateException(s"Unable to map result: $s")
   }
