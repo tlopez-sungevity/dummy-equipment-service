@@ -7,5 +7,3 @@ resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositori
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.3")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.3")
-
