@@ -3,11 +3,13 @@ Building
 
 You will need to have docker installed and running for your environment (including docker-machine on OSX).
 
-Run "make" from the repo root directory. 
+Run "make" from the repo root directory to create a docker contain for the microservice.
+
+Run "make publish" to publish the docker container to the registry.
 
 Configuration
 =============
-This microservice is configured using the following environment variables:
+This dockerized microservice is configured using the following environment variables:
 
 | Environment Variable  | Description                  |
 |-----------------------|------------------------------|

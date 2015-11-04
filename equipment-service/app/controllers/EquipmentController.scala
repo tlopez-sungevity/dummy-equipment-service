@@ -38,8 +38,8 @@ class EquipmentController @Inject() (equipmentService: EquipmentService) extends
           //TODO error response
           InternalServerError(Json.obj("message" -> msg))
         case f => 
-          Logger.error("Weird..", f)
-          InternalServerError("Weird")
+          Logger.error(s"Exception while finding equipoment for ID $id", f)
+          InternalServerError(Json.obj("message" -> "Internal Server Error"))
 
       }
     }
