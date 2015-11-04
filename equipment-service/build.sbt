@@ -53,7 +53,7 @@ scalacOptions ++= Seq("-Xlint", "-deprecation", "-feature")
 libraryDependencies += "org.scoverage" %% "scalac-scoverage-runtime" % "1.1.1"
 
 // exclude play generated code from scoverage
-coverageExcludedPackages := "<empty>;Reverse.*;router\\..*"
+coverageExcludedPackages := "<empty>;Reverse.*;router\\..*;service.equipment.slick.EquipmentModule"
 
 // fail if coverage is less than 100%
 coverageMinimum := 100
