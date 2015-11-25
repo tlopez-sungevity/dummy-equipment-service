@@ -1,6 +1,8 @@
 Building
 ========
 
+Requires JDK 8.
+
 You will need to have docker installed and running for your environment (including docker-machine on OSX).
 
 Run "make" from the repo root directory to create a docker contain for the microservice.
