@@ -1,3 +1,5 @@
+--liquibase formatted sql
+
 --changeset ahull@sungevity:2
 
 INSERT INTO manufacturer VALUES 
@@ -418,3 +420,9 @@ VALUES
   (19006,2,59,'SV60-250','250W Polycrystalline Panel',NULL,0.25,0.22,1650,992,NULL,NULL,NULL,NULL,1.015,-0.42,46,'2015-06-24',NULL,1.6368,'2015-06-24 21:14:04',NULL),
   (19007,2,60,'GIN P6-60-250','250W Polycrystalline Panel',NULL,0.25,0.22,1640,992,NULL,NULL,NULL,NULL,1.015,-0.43,46,'2015-06-24',NULL,1.62688,'2015-06-24 21:14:04',NULL),
   (19008,2,13,'JAM6-60/265-BK','265W Monocrystalline Full Black Panel',NULL,0.265,0.2376,1650,991,NULL,NULL,NULL,NULL,1.015,-0.41,44,'2015-06-24',NULL,1.63515,'2015-07-01 20:49:30',NULL);
+
+  --rollback delete from equipment;
+  --rollback delete from manufacturer;
+  --rollback delete from equipment_type;
+
+  --rollback delete from manufacturer; delete from equipment_type; delete from equipment

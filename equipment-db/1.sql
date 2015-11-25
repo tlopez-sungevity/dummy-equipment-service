@@ -1,5 +1,6 @@
---changeset ahull@sungevity:1
+--liquibase formatted sql
 
+--changeset ahull@sungevity.com:1 splitStatements:false
 create table equipment_type (
   id serial primary key,
   name varchar(255) default null
@@ -45,3 +46,7 @@ CREATE OR REPLACE FUNCTION update_modified_date_column() RETURNS TRIGGER AS '
 CREATE TRIGGER update_modified_date BEFORE UPDATE
   ON equipment FOR EACH ROW EXECUTE PROCEDURE
   update_modified_date_column();
+
+  --rollback drop table equipment;
+  --rollback drop table manufacturer;
+  --rollback drop table equipment_type;
