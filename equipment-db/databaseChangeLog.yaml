@@ -8,3 +8,5 @@ databaseChangeLog:
       file: 2.sql
   - include:
       file: 3.sql
+  - include:
+      file: 4.sql
