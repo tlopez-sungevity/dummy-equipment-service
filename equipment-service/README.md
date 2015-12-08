@@ -5,7 +5,7 @@ Requires JDK 8.
 
 You will need to have docker installed and running for your environment (including docker-machine on OSX).
 
-Run "make" from the repo root directory to create a docker contain for the microservice.
+Run "make" from the repo root directory to create a docker container for the microservice.
 
 Run "make publish" to publish the docker container to the registry.
 
