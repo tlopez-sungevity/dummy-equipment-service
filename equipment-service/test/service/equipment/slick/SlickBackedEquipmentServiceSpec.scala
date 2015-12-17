@@ -8,7 +8,7 @@ import org.scalamock.scalatest.MockFactory
 
 import org.joda.time.DateTime
 
-import _root_.slick.driver.JdbcProfile
+import scala.slick.driver.MySQLDriver.simple._
 
 import play.api.test._
 import play.api.test.Helpers._
@@ -108,10 +108,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
 
 
   trait InitializedEquipmentService {
-    val dbConfigProviderMock = stub[DatabaseConfigProvider]
-    (dbConfigProviderMock.get[JdbcProfile] _).when().returns(null)
-
-    val service = new SlickBackedEquipmentService(dbConfigProviderMock)      
+    val service = new SlickBackedEquipmentService()      
   }
 
   "A Slick-based implementation of the Equipment Service " should "convert result for module db query to a Module instance" in new ModuleFixture with InitializedEquipmentService {

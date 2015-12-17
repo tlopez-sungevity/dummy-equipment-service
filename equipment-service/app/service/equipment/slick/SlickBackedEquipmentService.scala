@@ -1,31 +1,30 @@
 package service.equipment.slick
 
-import org.joda.time.DateTime
-import javax.inject._
-import slick.driver.JdbcProfile
-import slick.driver.MySQLDriver.api._
-import com.github.tototoshi.slick.MySQLJodaSupport._
+import play.api.db.slick.DB
+import play.api.Logger
+import play.api.Play.current
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.db._
-import play.api.db.slick._
-import play.api.Logger
+import scala.slick.driver.MySQLDriver.simple._
 
+import java.sql.Timestamp
+import javax.inject._
+import org.joda.time.DateTime
 import service.equipment._
 
 /**
   * Slick implementation of the Equipment Service that reads equipment from a MySQL db.
-  *
-  * @constructor create a new controller with an injected db config provider
-  * @param dbConfigProvider the config for the equipment database 
   */
-class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfigProvider: DatabaseConfigProvider) extends EquipmentService {
+class SlickBackedEquipmentService extends EquipmentService {
+
+  val equipmentDBName = "equipment"
   
+  import com.github.tototoshi.slick.MySQLJodaSupport._
+
   protected[slick] type EquipmentResult = (Int, String, String, String, Option[String], DateTime, 
     Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean], Option[Double], 
     Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])
-
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
 
   class ManufacturerTable(tag: Tag) extends Table[(Int, String)](tag, "manufacturer") {
@@ -80,7 +79,13 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
   def getEquipment(equipmentId: EquipmentIdentity): Future[Option[Equipment]] = {
     Logger.info(s"Attempting to obtain equipment for $equipmentId")
 
-    val equipmentQuery = for {
+
+
+    import scala.language.postfixOps
+
+    DB(equipmentDBName).withSession { implicit session =>
+
+val equipmentQuery = for {
       e <- equipment if e.id === equipmentId.value
       et <- equipmentType if e.equipmentTypeId === et.id
       m <- manufacturer if e.manufacturerId === m.id
@@ -103,9 +108,10 @@ class SlickBackedEquipmentService @Inject()(@NamedDatabase("equipment") dbConfig
       e.inverterOutputVoltage,
       e.inverterIsThreePhase)
 
-    val foundEquipment = dbConfig.db.run(equipmentQuery.result)
+      val foundEquipment = equipmentQuery.list
 
-    foundEquipment map { results => results.headOption map toEquipment } 
+      Future.successful((foundEquipment headOption) map toEquipment) 
+    }
   }
 
   protected[slick] def toEquipment(result: EquipmentResult): Equipment = result match {
