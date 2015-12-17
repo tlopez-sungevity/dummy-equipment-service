@@ -19,7 +19,7 @@ class EquipmentApiClientSpec extends FlatSpec with Matchers with MockFactory wit
     (mockResponse.statusText _).when().returns(responseStatusText)
     (mockResponse.json _).when().returns(responseJson)
 
-    val mockRequest = stub[WSRequest]
+    val mockRequest = stub[WSRequestHolder]
     (mockRequest.get _).when().returns(Future.successful(mockResponse))
 
     val mockWs = mock[WSClient]

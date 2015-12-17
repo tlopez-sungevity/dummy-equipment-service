@@ -1,6 +1,6 @@
 name := """equipment-service"""
 
-version := "0.1.0"
+version := "0.2.0"
 
 scalaVersion := "2.11.7"
 
@@ -8,16 +8,16 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  "org.scalatest" %% "scalatest" % "2.2.1" % "it,test",
-  "org.scalatestplus" %% "play" % "1.4.0-M3" % "it,test",
+  "org.scalatest"      %% "scalatest"                    % "2.2.1" % "it,test",
+  "org.scalatestplus"  %% "play"                         % "1.2.0" % "it,test",
   "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "it,test",
-  "com.typesafe.play" %% "play-slick" % "1.0.0",
+  "com.typesafe.slick"      %% "slick"                % "2.1.0",
+  "com.typesafe.play" %% "play-slick" % "0.8.1",
   "mysql" % "mysql-connector-java" % "5.1.35",
-  "joda-time" % "joda-time" % "2.7",
-  "org.joda" % "joda-convert" % "1.7",
-  "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0",
+  "org.joda" % "joda-convert" % "1.6",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0",
   "net.codingwell" %% "scala-guice" % "4.0.0",
-  "com.sungevity" %% "equipment" % "0.1.0"
+  "com.sungevity" %% "equipment" % "0.2.0"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
@@ -43,10 +43,6 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .configs(IntegrationTest)
   .settings(settings: _*)
-
-// Play provides two styles of routers, one expects its actions to be injected, the
-// other, legacy style, accesses its actions statically.
-routesGenerator := InjectedRoutesGenerator
 
 scalacOptions ++= Seq("-Xlint", "-deprecation", "-feature")
 

@@ -1,7 +1,7 @@
 lazy val root = (project in file(".")).settings(
   name := "equipment-client",
   organization := "com.sungevity",
-  version := "0.1.0",
+  version := "0.2.0",
   scalaVersion := "2.11.7"
 )
 
@@ -14,18 +14,17 @@ publishTo := Some("Artifactory Realm" at "https://sungevity.artifactoryonline.co
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.2.4" % "test",
+  "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
-  "com.typesafe.play" %% "play-json" % "2.4.3",
-  "com.typesafe" % "config" % "1.3.0",
-  "com.typesafe.play" %% "play-ws" % "2.4.3",
+  "com.typesafe.play" %% "play-json" % "2.3.10",
+  "com.typesafe.play" %% "play-ws" % "2.3.10",
+  "com.typesafe" % "config" % "1.2.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "org.slf4j" % "slf4j-api" % "1.7.10",
-  "joda-time" % "joda-time" % "2.7",
-  "org.joda" % "joda-convert" % "1.7",
+  "org.joda" % "joda-convert" % "1.6",
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "com.sungevity" %% "play-siren" % "0.3.0",
-  "com.sungevity" %% "equipment" % "0.1.0"
+  "com.sungevity" %% "equipment" % "0.2.0"
 )
 
 // fail if coverage is less than 100%
