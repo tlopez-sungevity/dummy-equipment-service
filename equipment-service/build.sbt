@@ -1,6 +1,6 @@
 name := """equipment-service"""
 
-version := "0.2.0"
+version := "0.2.1"
 
 scalaVersion := "2.11.7"
 
@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.6",
   "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0",
   "net.codingwell" %% "scala-guice" % "4.0.0",
-  "com.sungevity" %% "equipment" % "0.2.0"
+  "com.sungevity" %% "equipment" % "0.2.1"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"

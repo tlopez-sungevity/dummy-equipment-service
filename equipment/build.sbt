@@ -1,7 +1,7 @@
 lazy val root = (project in file(".")).settings(
   name := "equipment",
   organization := "com.sungevity",
-  version := "0.2.0",
+  version := "0.2.1",
   scalaVersion := "2.11.7"
 )
 
