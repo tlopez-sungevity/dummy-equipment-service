@@ -51,7 +51,8 @@ class EquipmentServiceISpec extends PlaySpec with OneServerPerSuite {
           "widthMm" -> 808,
           "isBipvRated" -> false,
           "powerTemperatureCoefficient" -> -0.4525,
-          "normalOperatingCellTemperature" -> 46),
+          "normalOperatingCellTemperature" -> 46,
+          "medianPmaxMultiplier" -> 1d),
         "title" -> "BP Solar BP175B")
 
       response.status mustBe OK

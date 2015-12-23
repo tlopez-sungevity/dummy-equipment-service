@@ -59,7 +59,8 @@ case class Module (
   widthMm: Double,
   isBipvRated: Option[Boolean],
   powerTemperatureCoefficient: Double, //TOOD should module isBipvRated be optional?
-  normalOperatingCellTemperature: Double) extends Equipment
+  normalOperatingCellTemperature: Double,
+  medianPmaxMultiplier: Option[Double]) extends Equipment
 
 /**
  * Thrown for general problemns dealing with equipment.

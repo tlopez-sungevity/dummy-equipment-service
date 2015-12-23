@@ -32,6 +32,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
   	val isBipvRated = Some(false)
   	val powerTemperatureCoefficient = 0.9
   	val normalOperatingCellTemperature = 72d
+    val medianPmaxMultiplier = Some(1.015d)
 
   	val moduleResultWithDescription = (
   	  moduleId,
@@ -47,6 +48,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
   	  isBipvRated,
   	  Some(powerTemperatureCoefficient),
   	  Some(normalOperatingCellTemperature),
+      medianPmaxMultiplier,
       None, None, None, None
   	)
 
@@ -62,7 +64,8 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
       moduleWidthMm,
       isBipvRated,
       powerTemperatureCoefficient,
-      normalOperatingCellTemperature
+      normalOperatingCellTemperature,
+      medianPmaxMultiplier
     )        
   }
 
@@ -86,7 +89,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
       manufacturerName,
       someDescription,
       modified,
-      None, None, None, None, None, None, None,
+      None, None, None, None, None, None, None, None,
       someInverterRating,
       Some(inverterEfficiency),
       someInverterOutputVoltage,
@@ -126,7 +129,7 @@ class EquipmentServiceISpec extends FlatSpec with Matchers with MockFactory {
       "Borked",
       "Bork, Inc.",
       None, new DateTime(), None, 
-      None, None, None, None, None,
+      None, None, None, None, None, None,
       None, None, None, None, None
     )
 

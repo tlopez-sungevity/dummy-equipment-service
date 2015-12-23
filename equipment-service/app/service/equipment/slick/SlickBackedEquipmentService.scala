@@ -24,11 +24,11 @@ class SlickBackedEquipmentService extends EquipmentService {
 
   protected[slick] type EquipmentResult = (Int, String, String, String, Option[String], DateTime, 
     Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean], Option[Double], 
-    Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])
+    Option[Double], Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])
 
 
   class ManufacturerTable(tag: Tag) extends Table[(Int, String)](tag, "manufacturer") {
-    def id = column[Int]("id", O.PrimaryKey) // This is the primary key column
+    def id = column[Int]("id", O.PrimaryKey) 
     def name = column[String]("name")
 
     def * = (id, name)
@@ -36,7 +36,7 @@ class SlickBackedEquipmentService extends EquipmentService {
   val manufacturer = TableQuery[ManufacturerTable]
 
   class EquipmentTypeTable(tag: Tag) extends Table[(Int, String)](tag, "equipment_type") {
-    def id = column[Int]("id", O.PrimaryKey) // This is the primary key column
+    def id = column[Int]("id", O.PrimaryKey)
     def name = column[String]("name")
 
     def * = (id, name)
@@ -45,7 +45,7 @@ class SlickBackedEquipmentService extends EquipmentService {
 
 
   class EquipmentTable(tag: Tag) extends Table[(Int, Int, Int, String, Option[String], DateTime, Option[Double], Option[Double], Option[Double], Option[Double],
-    Option[Boolean], Option[Double], Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])](tag, "equipment") {
+    Option[Boolean], Option[Double], Option[Double], Option[Double], Option[Double], Option[Double], Option[Double], Option[Boolean])](tag, "equipment") {
 
     def id = column[Int]("id", O.PrimaryKey) // This is the primary key column
     def equipmentTypeId = column[Int]("equipment_type_id")
@@ -62,6 +62,8 @@ class SlickBackedEquipmentService extends EquipmentService {
     def panelIsBipvRated = column[Option[Boolean]]("panel_is_bipv_rated")
     def powerTempCoefficient = column[Option[Double]]("power_temp_coefficient")
     def normalOperatingCellTemperature = column[Option[Double]]("normal_operating_cell_temperature")
+    def medianPmaxMultiplier = column[Option[Double]]("median_pmax_multiplier")
+
 
     /* inverter columns */
     def rating = column[Option[Double]]("rating")
@@ -69,9 +71,9 @@ class SlickBackedEquipmentService extends EquipmentService {
     def inverterOutputVoltage = column[Option[Double]]("inverter_output_voltage")
     def inverterIsThreePhase = column[Option[Boolean]]("inverter_is_three_phase")
 
-    def * = (id, equipmentTypeId, manufacturerId, model, description, modifiedDate, panelKwStc, panelKwPtc,
-      panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, rating,
-      inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
+    def * = (id, equipmentTypeId, manufacturerId, model, description, modifiedDate, 
+      panelKwStc, panelKwPtc, panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, medianPmaxMultiplier, 
+      rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
   }
   val equipment = TableQuery[EquipmentTable]
 
@@ -103,6 +105,7 @@ val equipmentQuery = for {
       e.panelIsBipvRated,
       e.powerTempCoefficient,
       e.normalOperatingCellTemperature,
+      e.medianPmaxMultiplier,
       e.rating,
       e.inverterEfficiency,
       e.inverterOutputVoltage,
@@ -121,17 +124,17 @@ val equipmentQuery = for {
           "module",
           modelName, manufacturerName, description, modifiedDate,
           Some(panelKwStc), Some(panelKwPtc), Some(panelHeightMm), Some(panelWidthMm),
-          panelIsBipvRated, Some(powerTempCoefficient), Some(normalOperatingCellTemperature),
+          panelIsBipvRated, Some(powerTempCoefficient), Some(normalOperatingCellTemperature), medianPmaxMultiplier,
           None, None, None, _) =>
             Module(
               new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, panelKwStc, panelKwPtc,
-              panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature)
+              panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, medianPmaxMultiplier)
     
     case (
           id,
           "inverter" , modelName, manufacturerName, description, modifiedDate,
           None, None, None, None, 
-          _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
+          _, _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
           rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
             Inverter(new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
     
