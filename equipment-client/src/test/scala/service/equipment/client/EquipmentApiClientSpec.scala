@@ -48,7 +48,8 @@ class EquipmentApiClientSpec extends FlatSpec with Matchers with MockFactory wit
       widthMm = 790,
       isBipvRated = Some(false),
       powerTemperatureCoefficient = -0.409,
-      normalOperatingCellTemperature = 47.3)
+      normalOperatingCellTemperature = 47.3,
+      medianPmaxMultiplier = Some(1.015d))
 
    val moduleProperties = Json.obj(
       "id" -> 2004,
@@ -62,7 +63,8 @@ class EquipmentApiClientSpec extends FlatSpec with Matchers with MockFactory wit
       "widthMm" -> 790,
       "isBipvRated" -> false,
       "powerTemperatureCoefficient" -> -0.409,
-      "normalOperatingCellTemperature" -> 47.3)
+      "normalOperatingCellTemperature" -> 47.3,
+      "medianPmaxMultiplier" -> 1.015d)
 
     val serializedModule = Json.obj(
       "title" -> "BP Solar BP3170B",

@@ -51,7 +51,8 @@ object Implicits {
       (JsPath \ "widthMm").read[Double] and
       (JsPath \ "isBipvRated").readNullable[Boolean] and
       (JsPath \ "powerTemperatureCoefficient").read[Double] and
-      (JsPath \ "normalOperatingCellTemperature").read[Double]
+      (JsPath \ "normalOperatingCellTemperature").read[Double] and
+      (JsPath \ "medianPmaxMultiplier").readNullable[Double]
   )(Module.apply _)
 
   implicit val moduleWrites: Writes[Module] = (
@@ -66,7 +67,8 @@ object Implicits {
       (JsPath \ "widthMm").write[Double] and
       (JsPath \ "isBipvRated").writeNullable[Boolean] and
       (JsPath \ "powerTemperatureCoefficient").write[Double] and
-      (JsPath \ "normalOperatingCellTemperature").write[Double]
+      (JsPath \ "normalOperatingCellTemperature").write[Double] and
+      (JsPath \ "medianPmaxMultiplier").writeNullable[Double]
   )(unlift(Module.unapply))
 
   implicit class InverterSerializer(inverter: Inverter) extends SirenEntitySerializer {

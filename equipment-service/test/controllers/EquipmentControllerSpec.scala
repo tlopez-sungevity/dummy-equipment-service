@@ -112,7 +112,8 @@ class EquipmentControllerSpec extends PlaySpec with Results with MockFactory {
             widthMm = 790,
             isBipvRated = Some(false),
             powerTemperatureCoefficient = -0.409,
-            normalOperatingCellTemperature = 47.3)
+            normalOperatingCellTemperature = 47.3,
+            medianPmaxMultiplier = Some(1.015d))
         )),
         Json.obj(
           "title" -> "BP Solar BP3170B",
@@ -129,7 +130,8 @@ class EquipmentControllerSpec extends PlaySpec with Results with MockFactory {
             "widthMm" -> 790,
             "isBipvRated" -> false,
             "powerTemperatureCoefficient" -> -0.409,
-            "normalOperatingCellTemperature" -> 47.3)),
+            "normalOperatingCellTemperature" -> 47.3,
+            "medianPmaxMultiplier" -> 1.015d)),
         200
       )
     }
