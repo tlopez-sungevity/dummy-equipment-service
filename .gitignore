@@ -1,3 +1,11 @@
-.DS_Store
+logs
 target
-*.orig
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+
+#OSX nastiness
+.DS_Store
