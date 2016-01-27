@@ -1,7 +1,7 @@
 Building
 ========
 
-Requires JDK 8.
+Requires JDK 7.
 
 You will need to have docker installed and running for your environment (including docker-machine on OSX).
 
@@ -22,8 +22,22 @@ This dockerized microservice is configured using the following environment varia
 Running in a Docker Container
 =============================
 
-docker run -d -p 9000:9000 -e "EQUIPMENT_DB_URL=$EQUIPMENT_DB_URL" -e "EQUIPMENT_DB_USER=$EQUIPMENT_DB_USER" -e "EQUIPMENT_DB_PASSWORD=$EQUIPMENT_DB_PASSWORD" sungevity-docker-dockerv2-local.artifactoryonline.com/equipment-service
+The simplest way is to run the container is to define an env file containing the values for the environment variables:
+
+```bash
+docker run -d -p 9000:9000 --env-file=~/env/<your-env-file> sungevity-docker-dockerv2-local.artifactoryonline.com/equipment-service
+```
 
 Shell Into a Running Container
 ------------------------------
+
+Useful for debugging.
+
+```bash
 docker exec -it <container-id> bash 
+```
+
+HELP! My Container Doesn't Start
+================================
+
+Try removing the -d flag to get some insight. When set, this flag runs the container in the background. Removing the flag will run the container in the same shell session.
