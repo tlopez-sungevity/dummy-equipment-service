@@ -1,5 +1,5 @@
-FROM sungevity-docker-dockerv2-local.artifactoryonline.com/openjdk8:latest
-MAINTAINER Andy Hull <ahull@sungevity.com>
+FROM sungevity-docker-dockerv2-local.artifactoryonline.com/openjdk7:latest
+MAINTAINER Software Platform Engineering <software-platform-dev@sungevity.com>
 ENV component equipment-service
 ENV version 0.2.1
 COPY target/universal/${component}-${version}.zip /opt/${component}.zip
