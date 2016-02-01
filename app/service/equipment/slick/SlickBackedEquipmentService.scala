@@ -113,11 +113,15 @@ val equipmentQuery = for {
 
       val foundEquipment = equipmentQuery.list
 
-      Future.successful((foundEquipment headOption) map toEquipment) 
+      Future.successful((foundEquipment headOption) map toInverterEquipment)
+      Future.successful((foundEquipment headOption) map toModuleEquipment)
+
     }
   }
 
-  protected[slick] def toEquipment(result: EquipmentResult): Equipment = result match {
+
+
+  protected[slick] def toModuleEquipment(result: EquipmentResult): Equipment = result match {
     
     case (
           id,
@@ -129,15 +133,22 @@ val equipmentQuery = for {
             Module(
               new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, panelKwStc, panelKwPtc,
               panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, medianPmaxMultiplier)
-    
+
+
+    case s => throw new IllegalStateException(s"Unable to map result: $s")
+  }
+
+  protected[slick] def toInverterEquipment(result: EquipmentResult): Equipment = result match {
+
     case (
-          id,
-          "inverter" , modelName, manufacturerName, description, modifiedDate,
-          None, None, None, None, 
-          _, _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
-          rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
-            Inverter(new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
-    
+      id,
+      "inverter" , modelName, manufacturerName, description, modifiedDate,
+      None, None, None, None,
+      _, _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
+      rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
+      Inverter(new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
+
+
     case s => throw new IllegalStateException(s"Unable to map result: $s")
   }
 

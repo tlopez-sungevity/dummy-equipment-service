@@ -3,4 +3,11 @@
 # ~~~~
 
 # Home page
-GET     /equipment/:id              @controllers.EquipmentController.getEquipment(id: Int)
+
+GET     /dummy/inverter                             @controllers.TesController.inverter()
+GET     /dummy/module                             @controllers.TesController.module()
+GET     /dummy/sirenSpecModule                @controllers.TesController.sirenModule()
+GET     /dummy/sirenSpecInverter               @controllers.TesController.sirenInverter()
+GET     /dummy/module/:id                        @controllers.EquipmentController.getEquipment(id: Int)
+GET    /dummy/siren-spec/inverter             @controllers.EquipmentController.dummyGetInverterProductSpec
+GET    /dummy/siren-spec/module             @controllers.EquipmentController.dummyGetModuleProductSpec

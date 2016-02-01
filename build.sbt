@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.6",
   "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0",
   "net.codingwell" %% "scala-guice" % "4.0.0",
+  "com.sungevity"           %% "siren-spec"           % "0.0.2",
   "com.sungevity" %% "equipment-shared" % "0.2.1"
 )
 
