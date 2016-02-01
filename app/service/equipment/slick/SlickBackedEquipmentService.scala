@@ -72,7 +72,7 @@ class SlickBackedEquipmentService extends EquipmentService {
     def inverterIsThreePhase = column[Option[Boolean]]("inverter_is_three_phase")
 
     def * = (id, equipmentTypeId, manufacturerId, model, description, modifiedDate, 
-      panelKwStc, panelKwPtc, panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, medianPmaxMultiplier, 
+      panelKwStc, panelKwPtc, panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, medianPmaxMultiplier,
       rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
   }
   val equipment = TableQuery[EquipmentTable]
@@ -113,15 +113,11 @@ val equipmentQuery = for {
 
       val foundEquipment = equipmentQuery.list
 
-      Future.successful((foundEquipment headOption) map toInverterEquipment)
-      Future.successful((foundEquipment headOption) map toModuleEquipment)
-
+      Future.successful((foundEquipment headOption) map toEquipment)
     }
   }
 
-
-
-  protected[slick] def toModuleEquipment(result: EquipmentResult): Equipment = result match {
+  protected[slick] def toEquipment(result: EquipmentResult): Equipment = result match {
     
     case (
           id,
@@ -134,20 +130,13 @@ val equipmentQuery = for {
               new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, panelKwStc, panelKwPtc,
               panelHeightMm, panelWidthMm, panelIsBipvRated, powerTempCoefficient, normalOperatingCellTemperature, medianPmaxMultiplier)
 
-
-    case s => throw new IllegalStateException(s"Unable to map result: $s")
-  }
-
-  protected[slick] def toInverterEquipment(result: EquipmentResult): Equipment = result match {
-
-    case (
-      id,
-      "inverter" , modelName, manufacturerName, description, modifiedDate,
-      None, None, None, None,
-      _, _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
-      rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
-      Inverter(new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)
-
+//  case (
+//        id,
+//        "inverter" , modelName, manufacturerName, description, modifiedDate,
+//        None, None, None, None,
+//        _, _, _, _, /* _ fields are sometimes stuffed with marker values of false, 0,0 instead of null */
+//        rating, Some(inverterEfficiency), inverterOutputVoltage, inverterIsThreePhase) =>
+//          Inverter(new EquipmentIdentity(id), modelName, manufacturerName, description, modifiedDate, rating, inverterEfficiency, inverterOutputVoltage, inverterIsThreePhase)hase)
 
     case s => throw new IllegalStateException(s"Unable to map result: $s")
   }
